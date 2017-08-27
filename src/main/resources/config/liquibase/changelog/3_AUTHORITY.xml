@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="autoIncrement" value="true"/>
+
+    <changeSet id="AUTHORITY TABLE" author="Karol Kornecki">
+        <createTable tableName="AUTHORITY" schemaName="SAMPLE">
+            <column name="NAME" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="USER_AUTHORITY" schemaName="SAMPLE">
+            <column name="USER_ID" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AUTHORITY_NAME" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="USER_ID, AUTHORITY_NAME" tableName="USER_AUTHORITY" schemaName="SAMPLE"/>
+
+        <addForeignKeyConstraint baseColumnNames="AUTHORITY_NAME"
+                                 baseTableName="USER_AUTHORITY"
+                                 baseTableSchemaName="SAMPLE"
+                                 constraintName="FK_UA_AUTHORITY_NAME"
+                                 referencedColumnNames="NAME"
+                                 referencedTableName="AUTHORITY"
+                                 referencedTableSchemaName="SAMPLE"/>
+
+        <createIndex indexName="IDX_UA_AUTHORITY_NAME"
+                     tableName="USER_AUTHORITY" schemaName="SAMPLE">
+            <column name="AUTHORITY_NAME" type="varchar(50)"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="USER_ID"
+                                 baseTableName="USER_AUTHORITY"
+                                 baseTableSchemaName="SAMPLE"
+                                 constraintName="FK_UA_USER_ID"
+                                 referencedColumnNames="ID"
+                                 referencedTableName="USER"
+                                 referencedTableSchemaName="SAMPLE"/>
+
+        <createIndex indexName="IDX_UA_USER_ID"
+                     tableName="USER_AUTHORITY" schemaName="SAMPLE">
+            <column name="USER_ID" type="bigint"/>
+        </createIndex>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/authorities.csv"
+                  separator=";"
+                  tableName="AUTHORITY" schemaName="SAMPLE"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/users_authorities.csv"
+                  separator=";"
+                  tableName="USER_AUTHORITY" schemaName="SAMPLE"/>
+
+
+    </changeSet>
+
+</databaseChangeLog>

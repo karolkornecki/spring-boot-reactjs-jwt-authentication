@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "login": "admin",
+  "firstName": "John",
+  "lastName": "Brown",
+  "email": "jb@gmail.com",
+  "authorities": [
+    "ROLE_USER",
+    "ROLE_ADMIN"
+  ]
+}

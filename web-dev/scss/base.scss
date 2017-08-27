@@ -1,0 +1,20 @@
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+//TODO move to separate files under component's directory.
+.mdl-layout {
+  align-items: center;
+  justify-content: center;
+}
+
+.mdl-layout__content {
+  padding: 24px;
+  flex: none;
+}
+
+.height-1000 {
+  height: 1000px;
+}

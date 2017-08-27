@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="autoIncrement" value="true"/>
+
+    <changeSet id="USER TABLE" author="Karol Kornecki">
+        <createTable tableName="USER" schemaName="SAMPLE">
+            <column name="ID" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="LOGIN" type="varchar(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="PASSWORD_HASH" type="varchar(60)"/>
+            <column name="FIRST_NAME" type="varchar(50)"/>
+            <column name="LAST_NAME" type="varchar(50)"/>
+            <column name="EMAIL" type="varchar(100)">
+                <constraints unique="true" nullable="true"/>
+            </column>
+            <column name="CREATED_BY" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_DATE" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_MODIFIED_BY" type="varchar(50)"/>
+            <column name="LAST_MODIFIED_DATE" type="timestamp"/>
+            <column name="VERSION" type="bigint" defaultValue="0"/>
+        </createTable>
+        <createIndex indexName="IDX_U_LOGIN"
+                     tableName="USER" schemaName="SAMPLE"
+                     unique="true">
+            <column name="LOGIN" type="varchar(50)"/>
+        </createIndex>
+
+        <createIndex indexName="IDX_U_EMAIL"
+                     tableName="USER" schemaName="SAMPLE"
+                     unique="true">
+            <column name="EMAIL" type="varchar(100)"/>
+        </createIndex>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/users.csv"
+                  separator=";"
+                  tableName="USER" schemaName="SAMPLE">
+            <column name="CREATED_DATE" type="timestamp"/>
+        </loadData>
+        <dropDefaultValue tableName="USER" schemaName="SAMPLE" columnName="CREATED_DATE" columnDataType="datetime"/>
+
+    </changeSet>
+
+</databaseChangeLog>
